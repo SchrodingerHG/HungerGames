@@ -109,11 +109,11 @@ public class LangHandler {
                 }
             }
         } catch (IOException e) {
-            plugin.getLogger().log(Level.SEVERE, "Could not save language files", e);
+            e.printStackTrace();
         }
     }
 
-    public void checkLanguageKeys() {
+    public void validateLanguageKeys() {
         File langFolder = new File(plugin.getDataFolder(), "lang");
         File[] langFiles = langFolder.listFiles(((dir, name) -> name.endsWith(".yml")));
         if (langFiles == null) {
@@ -136,7 +136,7 @@ public class LangHandler {
                 try {
                     langConfig.save(langFile);
                 } catch (IOException e) {
-                    plugin.getLogger().log(Level.SEVERE, "Could update language keys", e);
+                    e.printStackTrace();
                 }
             }
         }

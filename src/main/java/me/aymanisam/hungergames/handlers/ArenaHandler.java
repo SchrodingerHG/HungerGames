@@ -56,7 +56,7 @@ public class ArenaHandler {
     public FileConfiguration getArenaConfig(World world) {
         createArenaConfig(world);
         if (arenaConfig == null) {
-            plugin.getLogger().log(Level.SEVERE, "Could not load arena.yml");
+            plugin.getLogger().log(Level.SEVERE, "Could not load arena.yml from");
             return null;
         }
         return arenaConfig;
@@ -141,10 +141,9 @@ public class ArenaHandler {
         createArenaConfig(world);
         configHandler.createWorldConfig(world);
         configHandler.loadItemsConfig(world);
-        configHandler.checkConfigKeys(world);
-        configHandler.checkConfigKeys(null);
+        configHandler.validateConfigKeys(world);
         langHandler.saveLanguageFiles();
-        langHandler.checkLanguageKeys();
+        langHandler.validateLanguageKeys();
         this.getArenaConfig(world);
     }
 }
