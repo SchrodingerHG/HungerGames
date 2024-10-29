@@ -8,9 +8,9 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.*;
@@ -22,6 +22,7 @@ public final class HungerGames extends JavaPlugin {
     public static Map<World, Boolean> gameStarted = new HashMap<>();
     public static Map<World, Boolean> gameStarting = new HashMap<>();
     public static List<String> worldNames = new ArrayList<>();
+    public static Map<String, List<Player>> customTeams = new HashMap<>();
 
     private GameSequenceHandler gameSequenceHandler;
     private ConfigHandler configHandler;
@@ -55,7 +56,7 @@ public final class HungerGames extends JavaPlugin {
 
         LangHandler langHandler = new LangHandler(this);
         langHandler.saveLanguageFiles();
-        langHandler.updateLanguageKeys();
+        langHandler.checkLanguageKeys();
         langHandler.loadLanguageConfigs();
 
         // Initializing shared classes

@@ -3,12 +3,8 @@ package me.aymanisam.hungergames.handlers;
 import com.github.retrooper.packetevents.PacketEvents;
 import com.github.retrooper.packetevents.protocol.entity.data.EntityData;
 import com.github.retrooper.packetevents.protocol.entity.data.EntityDataTypes;
-import com.github.retrooper.packetevents.protocol.particle.Particle;
-import com.github.retrooper.packetevents.protocol.particle.data.ParticleData;
-import com.github.retrooper.packetevents.protocol.particle.type.ParticleTypes;
 import com.github.retrooper.packetevents.wrapper.play.server.WrapperPlayServerEntityMetadata;
 import me.aymanisam.hungergames.HungerGames;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -19,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.*;
 
+import static me.aymanisam.hungergames.HungerGames.customTeams;
 import static me.aymanisam.hungergames.commands.ToggleChatCommand.playerChatModes;
 import static me.aymanisam.hungergames.handlers.CountDownHandler.playersPerTeam;
 import static me.aymanisam.hungergames.handlers.GameSequenceHandler.playersAlive;
@@ -37,7 +34,21 @@ public class TeamsHandler {
         this.configHandler = plugin.getConfigHandler();
     }
 
-    public void createTeam(World world) {
+    public void customTeams(World world) {
+        System.out.println("CustomTeams called");
+        List<List<Player>> worldTeamsAlive = teamsAlive.computeIfAbsent(world, k -> new ArrayList<>());
+        worldTeamsAlive.clear();
+
+        for (Map.Entry<String, List<Player>> entry : customTeams.entrySet()) {
+            List<Player> team = entry.getValue();
+            List<Player> teamCopy =  new ArrayList<>(team);
+            worldTeamsAlive.add(teamCopy);
+            processTeam(team, world);
+        }
+    }
+
+    public void createTeams(World world) {
+        System.out.println("CreateTeams called");
         List<Player> worldPlayersAlive = playersAlive.computeIfAbsent(world, k -> new ArrayList<>());
         Collections.shuffle(worldPlayersAlive);
 
@@ -167,7 +178,6 @@ public class TeamsHandler {
         List<EntityData> metadataList = Collections.singletonList(metadata);
 
         WrapperPlayServerEntityMetadata entityMetadataPacket = new WrapperPlayServerEntityMetadata(playerToGlow.getEntityId(), metadataList);
-
         PacketEvents.getAPI().getPlayerManager().sendPacket(playerToSeeGlow, entityMetadataPacket);
     }
 

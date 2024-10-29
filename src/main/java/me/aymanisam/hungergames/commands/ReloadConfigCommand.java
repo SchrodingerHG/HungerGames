@@ -40,7 +40,7 @@ public class ReloadConfigCommand implements CommandExecutor {
         configHandler.createWorldConfig(player.getWorld());
         configHandler.createPluginSettings();
         langHandler.saveLanguageFiles();
-        langHandler.updateLanguageKeys();
+        langHandler.checkLanguageKeys();
         arenaHandler.getArenaConfig(player.getWorld());
 
         sender.sendMessage(langHandler.getMessage(player, "config-reloaded"));

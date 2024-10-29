@@ -1,7 +1,6 @@
 package me.aymanisam.hungergames.handlers;
 
 import me.aymanisam.hungergames.HungerGames;
-import me.aymanisam.hungergames.listeners.ArenaSelectListener;
 import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -57,7 +56,7 @@ public class ArenaHandler {
     public FileConfiguration getArenaConfig(World world) {
         createArenaConfig(world);
         if (arenaConfig == null) {
-            plugin.getLogger().log(Level.SEVERE, "Could not load arena.yml from");
+            plugin.getLogger().log(Level.SEVERE, "Could not load arena.yml");
             return null;
         }
         return arenaConfig;
@@ -145,7 +144,7 @@ public class ArenaHandler {
         configHandler.checkConfigKeys(world);
         configHandler.checkConfigKeys(null);
         langHandler.saveLanguageFiles();
-        langHandler.updateLanguageKeys();
+        langHandler.checkLanguageKeys();
         this.getArenaConfig(world);
     }
 }

@@ -86,6 +86,9 @@ public class CommandDispatcher implements CommandExecutor, TabCompleter {
                 case "scanarena":
                     executor = new ArenaScanCommand(plugin, langHandler);
                     break;
+                case "team":
+                    executor = new TeamSetCommand(langHandler);
+                    break;
                 case "border":
                     executor = new BorderSetCommand(plugin, langHandler);
                     break;
@@ -115,7 +118,7 @@ public class CommandDispatcher implements CommandExecutor, TabCompleter {
         if (sender instanceof Player player) {
             if (args.length == 1) {
                 List<String> completions = new ArrayList<>();
-                String[] commands = {"join", "lobby", "start", "spectate", "select", "end", "teamchat", "map", "modifiers", "saveworld", "teamsize", "chestrefill", "supplydrop", "setspawn", "create", "scanarena", "border", "reloadconfig", "setsign"};
+                String[] commands = {"join", "lobby", "start", "spectate", "select", "end", "teamchat", "team", "map", "modifiers", "saveworld", "teamsize", "chestrefill", "supplydrop", "setspawn", "create", "scanarena", "border", "reloadconfig", "setsign"};
 
                 for (String subcommand : commands) {
                     if (sender.hasPermission("hungergames." + subcommand)) {
@@ -145,6 +148,10 @@ public class CommandDispatcher implements CommandExecutor, TabCompleter {
                     String worldNameToRemove = (String) configHandler.createPluginSettings().get("lobby-world");
                     worldNames.remove(worldNameToRemove);
                     return worldNames;
+                }
+            } else if (args[0].equalsIgnoreCase("team")) {
+                if (args.length == 2) {
+                    return List.of("list", "add", "remove", "reset");
                 }
             }
         }

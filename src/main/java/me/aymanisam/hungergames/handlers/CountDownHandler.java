@@ -91,7 +91,11 @@ public class CountDownHandler {
     private void runAfterDelay(World world) {
         List<BukkitTask> worldCountDownTasks = countDownTasks.computeIfAbsent(world, k -> new ArrayList<>());
 
-        teamsHandler.createTeam(world);
+        if (configHandler.createPluginSettings().getBoolean("custom-teams")) {
+            teamsHandler.customTeams(world);
+        } else {
+            teamsHandler.createTeams(world);
+        }
 
         worldCountDownTasks.add(plugin.getServer().getScheduler().runTaskLater(plugin, () -> {
             this.gameSequenceHandler.startGame(world);
