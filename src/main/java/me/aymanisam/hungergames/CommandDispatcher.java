@@ -3,6 +3,7 @@ package me.aymanisam.hungergames;
 import me.aymanisam.hungergames.commands.*;
 import me.aymanisam.hungergames.handlers.*;
 import me.aymanisam.hungergames.listeners.TeamVotingListener;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -152,6 +153,16 @@ public class CommandDispatcher implements CommandExecutor, TabCompleter {
             } else if (args[0].equalsIgnoreCase("team")) {
                 if (args.length == 2) {
                     return List.of("list", "add", "remove", "reset");
+                }
+                if (args.length == 3) {
+                    return List.of("<team_name>");
+                }
+                if (args.length == 4) {
+                    List<String> onlinePlayers = new ArrayList<>();
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        onlinePlayers.add(p.getName());
+                    }
+                    return onlinePlayers;
                 }
             }
         }
