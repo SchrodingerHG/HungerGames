@@ -35,20 +35,22 @@ public class TeamsHandler {
     }
 
     public void customTeams(World world) {
-        System.out.println("CustomTeams called");
+        List<List<Player>> worldTeams = teams.computeIfAbsent(world, k -> new ArrayList<>());
         List<List<Player>> worldTeamsAlive = teamsAlive.computeIfAbsent(world, k -> new ArrayList<>());
+
+        worldTeams.clear();
         worldTeamsAlive.clear();
 
         for (Map.Entry<String, List<Player>> entry : customTeams.entrySet()) {
             List<Player> team = entry.getValue();
             List<Player> teamCopy =  new ArrayList<>(team);
+            worldTeams.add(teamCopy);
             worldTeamsAlive.add(teamCopy);
             processTeam(team, world);
         }
     }
 
     public void createTeams(World world) {
-        System.out.println("CreateTeams called");
         List<Player> worldPlayersAlive = playersAlive.computeIfAbsent(world, k -> new ArrayList<>());
         Collections.shuffle(worldPlayersAlive);
 
@@ -107,6 +109,9 @@ public class TeamsHandler {
 
     private void sendTeamMessagesAndSetupItems(Player player, List<Player> team, World world) {
         List<List<Player>> worldTeams = teams.computeIfAbsent(world, k -> new ArrayList<>());
+
+        System.out.println("Worldteams: " + worldTeams);
+        System.out.println("Teams: " + teams);
 
         int teamId = worldTeams.indexOf(team) + 1;
         player.sendMessage(langHandler.getMessage(player, "team.id", teamId));
