@@ -110,10 +110,19 @@ public class TeamsHandler {
     private void sendTeamMessagesAndSetupItems(Player player, List<Player> team, World world) {
         List<List<Player>> worldTeams = teams.computeIfAbsent(world, k -> new ArrayList<>());
 
-        System.out.println("Worldteams: " + worldTeams);
-        System.out.println("Teams: " + teams);
+        String teamId = "";
 
-        int teamId = worldTeams.indexOf(team) + 1;
+        if (configHandler.createPluginSettings().getBoolean("custom-teams")) {
+            for (Map.Entry<String, List<Player>> entry : customTeams.entrySet()) {
+                if (entry.getValue().equals(team)) {
+                    teamId = entry.getKey();
+                    break;
+                }
+            }
+        } else {
+            teamId = String.valueOf(worldTeams.indexOf(team) + 1);
+        }
+
         player.sendMessage(langHandler.getMessage(player, "team.id", teamId));
 
         String teammateNames = getTeammateNames(team, player);
