@@ -1,6 +1,5 @@
 package me.aymanisam.hungergames.handlers;
 
-import com.google.common.collect.Sets;
 import me.aymanisam.hungergames.HungerGames;
 import me.aymanisam.hungergames.listeners.SignClickListener;
 import me.aymanisam.hungergames.listeners.TeamVotingListener;
@@ -17,9 +16,7 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 
-import static me.aymanisam.hungergames.HungerGames.gameStarted;
-import static me.aymanisam.hungergames.HungerGames.gameStarting;
-import static me.aymanisam.hungergames.listeners.TeamVotingListener.giveVotingBook;
+import static me.aymanisam.hungergames.HungerGames.*;
 
 public class SetSpawnHandler {
     private final HungerGames plugin;
@@ -98,13 +95,29 @@ public class SetSpawnHandler {
         List<String> worldSpawnPoints = spawnPoints.computeIfAbsent(world, k -> new ArrayList<>());
 
         List<String> shuffledSpawnPoints = new ArrayList<>(worldSpawnPoints);
-        Collections.shuffle(shuffledSpawnPoints);
 
         Map<String, Player> worldSpawnPointMap = spawnPointMap.computeIfAbsent(world, k-> new HashMap<>());
 
-        for (String spawnPoint : shuffledSpawnPoints) {
-            if (!worldSpawnPointMap.containsKey(spawnPoint)) {
-                return spawnPoint;
+        if (configHandler.createPluginSettings().getBoolean("custom-teams")) {
+            int teamIndex = 0;
+            for (Map.Entry<String, List<Player>> entry : customTeams.entrySet()) {
+                List<Player> team = entry.getValue();
+                if (team.contains(player)) {
+                    int playerIndex = team.indexOf(player);
+                    int spawnPointIndex = teamIndex * (configHandler.getWorldConfig(world).getInt("players-per-team")) + playerIndex;
+                    if (spawnPointIndex < worldSpawnPoints.size()) {
+                        return worldSpawnPoints.get(spawnPointIndex);
+                    }
+                }
+                teamIndex++;
+            }
+        } else {
+            Collections.shuffle(shuffledSpawnPoints);
+
+            for (String spawnPoint : shuffledSpawnPoints) {
+                if (!worldSpawnPointMap.containsKey(spawnPoint)) {
+                    return spawnPoint;
+                }
             }
         }
 
