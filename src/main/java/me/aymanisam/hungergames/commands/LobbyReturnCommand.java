@@ -58,13 +58,33 @@ public class LobbyReturnCommand implements CommandExecutor {
             return true;
         }
 
+        if (args.length < 2)  {
+            if (!(player.hasPermission("hungergames.lobby.all"))) {
+                sender.sendMessage(langHandler.getMessage(player, "no-permission"));
+                return true;
+            }
+
+            if (args[0].equalsIgnoreCase("all")) {
+                for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+                    teleportPlayerToLobby(p, true);
+                }
+            }
+
+            return true;
+        }
+
+        teleportPlayerToLobby(player, false);
+
+        return true;
+    }
+
+    public void teleportPlayerToLobby(Player player, Boolean isAll) {
+        World world = player.getWorld();
         String lobbyWorldName = (String) configHandler.createPluginSettings().get("lobby-world");
 
-        World world = player.getWorld();
-
-        if (world.getName().equals(lobbyWorldName)) {
+        if (!isAll && world.getName().equals(lobbyWorldName)) {
             player.sendMessage(langHandler.getMessage(player, "game.not-lobby"));
-            return true;
+            return;
         }
 
         setSpawnHandler.removePlayerFromSpawnPoint(player, world);
@@ -74,9 +94,16 @@ public class LobbyReturnCommand implements CommandExecutor {
         Map<String, Player> worldSpawnPointMap = setSpawnHandler.spawnPointMap.computeIfAbsent(world, k -> new HashMap<>());
         List<String> worldSpawnPoints = setSpawnHandler.spawnPoints.computeIfAbsent(world, k -> new ArrayList<>());
 
-        for (Player p : world.getPlayers()) {
-            langHandler.getLangConfig(p);
-            p.sendMessage(langHandler.getMessage(player, "game.left", player.getName(), worldSpawnPointMap.size(), worldSpawnPoints.size()));
+        if (!isAll) {
+            for (Player p : world.getPlayers()) {
+                langHandler.getLangConfig(p);
+                p.sendMessage(langHandler.getMessage(player, "game.left", player.getName(), worldSpawnPointMap.size(), worldSpawnPoints.size()));
+            }
+        } else {
+            for (Player p : world.getPlayers()) {
+                langHandler.getLangConfig(p);
+                p.sendMessage(langHandler.getMessage(player, "game.tp-lobby"));
+            }
         }
 
         int minPlayers = configHandler.getWorldConfig(world).getInt("min-players");
@@ -121,7 +148,7 @@ public class LobbyReturnCommand implements CommandExecutor {
         }
 
         signClickListener.setSignContent(signHandler.loadSignLocations());
-
-        return true;
     }
 }
+
+

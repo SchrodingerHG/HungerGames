@@ -164,6 +164,10 @@ public class CommandDispatcher implements CommandExecutor, TabCompleter {
                     }
                     return onlinePlayers;
                 }
+            } else if (args[0].equalsIgnoreCase("lobby")) {
+                if (args.length == 2) {
+                    return List.of("all");
+                }
             }
         }
         return new ArrayList<>();
