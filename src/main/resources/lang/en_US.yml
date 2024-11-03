@@ -61,7 +61,7 @@ game:
   no-worlds: "&cCould not find enough worlds to create signs"
   join-instruction: "&dJoin the game with &b/hg join &dor click the sign!"
   left: "&b{0} &dhas left &2[{1}/{2}]"
-  tp-lobby: "&dyou have been teleported to the lobby"
+  tp-lobby: "&dYou have been teleported to the lobby"
   worldsaved: "&aWorld &b{0} &ahas been saved!"
   not-team: "&cThis command cannot be run in a solo game"
 

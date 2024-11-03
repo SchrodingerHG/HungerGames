@@ -21,8 +21,11 @@ permissions:
     description: "Allows you to join the game in HungerGames"
     default: true
   hungergames.lobby:
-    description: "Allows you return tot he lobby in HungerGames"
+    description: "Allows you return to the lobby in HungerGames"
     default: true
+  hungergames.lobby.all:
+    description: "Allows to return all players to the lobby before starts the game in HungerGames"
+    default: op
   hungergames.start:
     description: "Allows you to start the game in HungerGames"
     default: op
@@ -67,4 +70,7 @@ permissions:
     default: op
   hungergames.saveworld:
     description: "Allows you to save the world for HungerGames"
+    default: op
+  hungergames.team:
+    description: "Allows you to assign custom teams for HungerGames"
     default: op
