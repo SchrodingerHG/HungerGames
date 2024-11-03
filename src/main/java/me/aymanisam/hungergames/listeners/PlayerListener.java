@@ -120,11 +120,14 @@ public class PlayerListener implements Listener {
         Player player = event.getEntity();
         World world = player.getWorld();
 
+        String deathMsg = null;
+
         List<Player> worldPlayersWaiting = setSpawnHandler.playersWaiting.computeIfAbsent(world, k -> new ArrayList<>());
         List<Player> worldPlayersAlive = playersAlive.computeIfAbsent(world, k -> new ArrayList<>());
 
         if (gameStarted.getOrDefault(world, false) || gameStarting.getOrDefault(world, false)) {
             worldPlayersAlive.remove(player);
+            deathMsg = event.getDeathMessage();
             event.setDeathMessage(null);
         } else {
             setSpawnHandler.removePlayerFromSpawnPoint(player, world);
@@ -171,11 +174,9 @@ public class PlayerListener implements Listener {
         if (gameStarted.getOrDefault(world, false)) {
             for (Player p : world.getPlayers()) {
                 langHandler.getLangConfig(p);
-                if (killer != null)
-                    p.sendMessage(langHandler.getMessage(player, "game.killed-message", player.getName(), killer.getName()));
-                else {
-                    p.sendMessage(langHandler.getMessage(player, "game.death-message", player.getName()));
-                }
+                assert deathMsg != null;
+                p.sendMessage(deathMsg);
+                p.sendMessage(langHandler.getMessage(player, "game.killed-message", player.getName()));
             }
         }
     }
