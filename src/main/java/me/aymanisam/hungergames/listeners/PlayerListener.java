@@ -8,10 +8,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -249,6 +252,27 @@ public class PlayerListener implements Listener {
                     }
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onPlayerPickup(EntityPickupItemEvent event) {
+        if (!(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        Item item = event.getItem();
+        World world = item.getWorld();
+        FileConfiguration config = configHandler.getWorldConfig(world);
+        boolean pickupIntoInventory = config.getBoolean("candydrop.pickup-into-Inventory");
+
+//        int currentPoints = playerPoints.getOrDefault(player, 0);
+//        playerPoints.put(player, currentPoints + 1);
+//        player.sendMessage("You collected a candy! Total points: " + playerPoints.get(player));
+
+        if (!pickupIntoInventory && item.getItemStack().getType() == Material.SUGAR) {
+            event.setCancelled(true);
+            event.getItem().remove();
         }
     }
 }

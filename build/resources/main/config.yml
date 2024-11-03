@@ -66,4 +66,18 @@ killer-effects:
   - effect: ABSORPTION
     duration: 300
     level: 0
+# Dropping candies around entities/mobs when they die
+candydrop:
+  mob: true
+  player: true
+  max-drop: 5
+  min-drop: 1
+  # 1 = block around the entity. But the dropping location can be depended on the natural item dropping algorithm in the minecraft
+  # Therefore the best range would 1 block
+  drop-range: 1
+  merge-items: false
+  pickup-into-Inventory: true
+  mobs:
+      - ZOMBIE
+
 # For more information on changing potion effects, see https://github.com/cantankerous-ally/Hunger-Games/wiki/Cheat-Sheets/

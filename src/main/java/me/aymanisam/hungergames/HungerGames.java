@@ -8,6 +8,7 @@ import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -85,6 +86,9 @@ public final class HungerGames extends JavaPlugin {
 
         SignClickListener signClickListener = new SignClickListener(this, langHandler, setSpawnHandler, arenaHandler);
         getServer().getPluginManager().registerEvents(signClickListener, this);
+
+        EntityListener entityListener = new EntityListener(this, langHandler);
+        getServer().getPluginManager().registerEvents(entityListener, this);
 
         PlayerListener playerListener = new PlayerListener(this, langHandler, setSpawnHandler, scoreBoardHandler);
         getServer().getPluginManager().registerEvents(playerListener, this);
