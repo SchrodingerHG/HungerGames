@@ -172,11 +172,26 @@ public class PlayerListener implements Listener {
         world.playSound(player.getLocation(), Sound.ENTITY_WITHER_DEATH, 0.4f, 1.0f);
 
         if (gameStarted.getOrDefault(world, false)) {
+            String playerName = player.getName();
+            int playerNameIndex = deathMsg.indexOf(playerName);
+            int byIndex = deathMsg.indexOf(" by ");
+            String formattedDeathMsg = null;
+
+            if (playerNameIndex != -1 && byIndex != -1 && byIndex > playerNameIndex) {
+                String killerName = deathMsg.substring(byIndex + 4).trim();
+
+                formattedDeathMsg =
+                        "&b" + playerName +
+                                "&c" + deathMsg.substring(playerNameIndex + playerName.length(), byIndex + 4) +
+                                "&d" + killerName;
+            }
+
             for (Player p : world.getPlayers()) {
-                langHandler.getLangConfig(p);
-                assert deathMsg != null;
-                p.sendMessage(deathMsg);
-                p.sendMessage(langHandler.getMessage(player, "game.killed-message", player.getName()));
+                if (formattedDeathMsg != null) {
+                    p.sendMessage(ChatColor.translateAlternateColorCodes('&', formattedDeathMsg) + langHandler.getMessage(player, "game.killed-message"));
+                } else {
+                    p.sendMessage(langHandler.getMessage(player, "game.death-message", player.getName()));
+                }
             }
         }
     }

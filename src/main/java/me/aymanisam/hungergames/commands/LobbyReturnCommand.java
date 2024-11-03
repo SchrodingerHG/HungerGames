@@ -12,10 +12,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Level;
 
 import static me.aymanisam.hungergames.HungerGames.gameStarting;
@@ -58,7 +55,9 @@ public class LobbyReturnCommand implements CommandExecutor {
             return true;
         }
 
-        if (args.length < 2)  {
+        String lobbyWorldName = (String) configHandler.createPluginSettings().get("lobby-world");
+
+        if (args.length == 1)  {
             if (!(player.hasPermission("hungergames.lobby.all"))) {
                 sender.sendMessage(langHandler.getMessage(player, "no-permission"));
                 return true;
@@ -66,21 +65,25 @@ public class LobbyReturnCommand implements CommandExecutor {
 
             if (args[0].equalsIgnoreCase("all")) {
                 for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-                    teleportPlayerToLobby(p, true);
+                    World world = p.getWorld();
+                    if (world.getName().equals(lobbyWorldName)) {
+                        continue;
+                    }
+
+                    teleportPlayerToLobby(p, lobbyWorldName, true);
                 }
             }
 
             return true;
         }
 
-        teleportPlayerToLobby(player, false);
+        teleportPlayerToLobby(player, lobbyWorldName, false);
 
         return true;
     }
 
-    public void teleportPlayerToLobby(Player player, Boolean isAll) {
+    public void teleportPlayerToLobby(Player player, String lobbyWorldName, Boolean isAll) {
         World world = player.getWorld();
-        String lobbyWorldName = (String) configHandler.createPluginSettings().get("lobby-world");
 
         if (!isAll && world.getName().equals(lobbyWorldName)) {
             player.sendMessage(langHandler.getMessage(player, "game.not-lobby"));
@@ -100,10 +103,8 @@ public class LobbyReturnCommand implements CommandExecutor {
                 p.sendMessage(langHandler.getMessage(player, "game.left", player.getName(), worldSpawnPointMap.size(), worldSpawnPoints.size()));
             }
         } else {
-            for (Player p : world.getPlayers()) {
-                langHandler.getLangConfig(p);
-                p.sendMessage(langHandler.getMessage(player, "game.tp-lobby"));
-            }
+            langHandler.getLangConfig(player);
+            player.sendMessage(langHandler.getMessage(player, "game.tp-lobby"));
         }
 
         int minPlayers = configHandler.getWorldConfig(world).getInt("min-players");

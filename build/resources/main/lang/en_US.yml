@@ -44,7 +44,7 @@ game:
   time-up: "&6Time's up! &b{0} &dwon"
   team-kills: "&6Time's up! &b{0} &dwon with their team having most kills!"
   team-alive: "&6Time's up! &b{0} &dwon with their team having \n most players alive!"
-  killed-message: "&b{0} &chas been eliminated from the game"
+  killed-message: "&c and has been eliminated from the game"
   death-message: "&b{0} &chas eliminated themselves from the game"
   start: "&aThe game has started!"
   grace-start: "&6The grace period has started! PvP is disabled."
@@ -61,7 +61,7 @@ game:
   no-worlds: "&cCould not find enough worlds to create signs"
   join-instruction: "&dJoin the game with &b/hg join &dor click the sign!"
   left: "&b{0} &dhas left &2[{1}/{2}]"
-  tp-lobby: "&dyou have been teleported to the lobby"
+  tp-lobby: "&dYou have been teleported to the lobby"
   worldsaved: "&aWorld &b{0} &ahas been saved!"
   not-team: "&cThis command cannot be run in a solo game"
 
